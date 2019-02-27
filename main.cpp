@@ -1,14 +1,16 @@
-#include <stdio.h>
+
 #include <iostream>
 #include <stack>
 #include <vector>
-
+using namespace std;
 typedef struct State *Pstate;
 typedef struct State{
 	int x, y;
 	Pstate parent;
 	int hd;
 };
+
+
 
 //Kiem tra trang thai dich
 bool goalcheck(Pstate s){
@@ -116,6 +118,7 @@ Pstate call_operator(Pstate s, int op_no){
 			break;
 		case 5:
 			return LamrongX(s);
+			break;
 		case 6:
 			return LamrongY(s);
 			break;
@@ -146,7 +149,7 @@ Pstate DFS(){
 	vector<Pstate>explored; //explored (Close) danh sach cac trang thai da duoc kiem tra
 	Pstate kiemtra;
 	cout<<"Bat dau\n";
-	cout<<"0, 0\n";
+//	cout<<"0, 0\n";
 	while(!Frontier.empty()){
 		kiemtra = Frontier.top(); //Lay ra gia tri ben trai cua Frontier
 		Frontier.pop();
@@ -169,10 +172,11 @@ Pstate DFS(){
 }
 
 int main(){
-//	Trang thai bat dau
-	Pstate pStart = new State;
-	pStart->x=0;
-	pStart->y=0;
-	pStart->parent=NULL;
+
+    Pstate n = DFS();
+    while(n){
+        cout<<n->x<<" "<<n->y<<endl;
+        n = n->parent;
+    }
 	return 0;
 }
