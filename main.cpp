@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <iostream>
+#include <stack>
+#include <vector>
 
 typedef struct State *Pstate;
 typedef struct State{
@@ -121,15 +124,49 @@ Pstate call_operator(Pstate s, int op_no){
 	}
 }
 
-////Kiem tra trang thai
-//bool foundstate(Pstate pstate, vector<Pstate> openlist){
-//	for(Pstate tmp : openlist){
-//		if(pstate->x == tmp->x && pstate->y == tmp->y){
-//			return true;
-//		}
-//	}
-//	return false;
-//}
+//Kiem tra trang thai
+bool foundstate(Pstate pstate, vector<Pstate> openlist){
+	for(Pstate tmp : openlist){
+		if(pstate->x == tmp->x && pstate->y == tmp->y){
+			return true;
+		}
+	}
+	return false;
+}
+
+//Deepth-first-search
+Pstate DFS(){
+	//Khoi tao trang thai dau
+	Pstate pStart = new State;
+	pStart->x = 0;
+	pStart->y = 0;
+	pStart->parent = NULL;
+	stack<Pstate>Frontier; //Frontier (Open) danh sach cac trang thai se duoc kiem tra
+	Frontier.push(pStart);
+	vector<Pstate>explored; //explored (Close) danh sach cac trang thai da duoc kiem tra
+	Pstate kiemtra;
+	cout<<"Bat dau\n";
+	cout<<"0, 0\n";
+	while(!Frontier.empty()){
+		kiemtra = Frontier.top(); //Lay ra gia tri ben trai cua Frontier
+		Frontier.pop();
+		if(goalcheck(kiemtra)){
+			return kiemtra;
+		}
+		explored.push_back(kiemtra); //Dua trang thai vao explored
+		for (int op=1; op < 6; op++){
+			Pstate newstate = call_operator(kiemtra, op);
+			if(newstate != NULL){
+				if(foundstate(newstate, explored)){
+					continue; // Trang thai moi da duoc kiem tra
+				}
+				newstate->hd = op;
+				Frontier.push(newstate);
+			}
+		}
+	}
+	return NULL;
+}
 
 int main(){
 //	Trang thai bat dau
