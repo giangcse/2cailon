@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <list>
 using namespace std;
 typedef struct State *Pstate;
 typedef struct State{
@@ -165,6 +166,36 @@ Pstate DFS(){
 				}
 				newstate->hd = op;
 				Frontier.push(newstate);
+			}
+		}
+	}
+	return NULL;
+}
+
+//Breadth-first-search
+Pstate BFS(){
+	//Khoi tao trang thai dau
+	Pstate pStart = new State;
+	pStart->x = 0;
+	pStart->y = 0;
+	pStart->parent = NULL;
+	list<Pstate>Frontier;
+	Frontier.push_back(pStart);
+	vector<Pstate>explored;
+	Pstate kiemtra;
+	cout<<"Bat dau\n";
+	while(!Frontier.empty()){
+		if(goalcheck(kiemtra))
+			return kiemtra;
+		explored.push_back(kiemtra);
+		for(int op=1; op < 6; op++){
+			Pstate newstate = call_operator(kiemtra, op);
+			if(newstate != NULL){
+				if(foundstate(newstate, explored)){
+					continue;
+				}
+				newstate->hd = op;
+				Frontier.push_back(newstate);
 			}
 		}
 	}
